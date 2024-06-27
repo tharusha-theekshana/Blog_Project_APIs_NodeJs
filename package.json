@@ -1,0 +1,19 @@
+{
+  "name": "blog_project_api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "type": "module",
+  "author": "Tharusha Theekshana",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mongoose": "^8.4.4",
+    "nodemon": "^3.1.4"
+  }
+}
