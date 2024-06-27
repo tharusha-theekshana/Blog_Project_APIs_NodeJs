@@ -1,9 +1,7 @@
 import http from "https";
 import app from "./app.js"
 
-import config from './config/keys.js';
-
-const {port} = config;
+import {port} from './config/keys.js';
 
 // create server
 const server = http.createServer(app);

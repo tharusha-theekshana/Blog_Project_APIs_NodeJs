@@ -1,5 +1,4 @@
-const {PORT} = process.env;
+const {PORT,CONNECTION_URL} = process.env;
 
-const config = {port : PORT}
-
-export default config;
+export const port = PORT;
+export const connection_url = CONNECTION_URL;
