@@ -1,4 +1,4 @@
-import http from "https";
+import * as http from "http";
 import app from "./app.js"
 
 import {port} from './config/keys.js';
