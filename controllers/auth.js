@@ -11,7 +11,7 @@ const signup = async (req, res, next) => {
         res.status(200).json({code: 201, status: true, message: "User registered successfully ... !"});
 
     } catch (e) {
-        console.log(e.message);
+        next(e);
     }
 
 };
