@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import databaseConnection from "./connection/database_connection.js"
 import {router} from "./routes/auth.js";
 import morgan from "morgan";
+import errorHandler from "./middlewares/index.js";
 
 dotenv.config();
 
@@ -20,5 +21,8 @@ app.use(morgan("dev")); // use to console log api request routes
 
 //route section
 app.use("/api/v1/auth",router);
+
+//error handler
+app.use(errorHandler);
 
 export default app;
