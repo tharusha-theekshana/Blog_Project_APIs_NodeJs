@@ -18,6 +18,18 @@ const signupValidator = [
         .withMessage("Password is required.")
 ];
 
+const signInValidator = [
+    check("email")
+        .isEmail()
+        .withMessage("Invalid Email.")
+        .notEmpty()
+        .withMessage("Email is required."),
+
+    check("password")
+        .notEmpty()
+        .withMessage("Password is required.")
+];
+
 const validate = (req,res,next) => {
     const errors = validationResult(req);
     const mappedErrors = {};
@@ -33,4 +45,5 @@ const validate = (req,res,next) => {
     }
 }
 
-export {signupValidator,validate};
+
+export {signupValidator,signInValidator,validate};
