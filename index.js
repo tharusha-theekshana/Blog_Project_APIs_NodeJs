@@ -1,7 +1,7 @@
 import * as http from "http";
 import app from "./app.js"
 
-import {port} from './config/keys.js';
+const port = process.env.PORT;
 
 // create server
 const server = http.createServer(app);

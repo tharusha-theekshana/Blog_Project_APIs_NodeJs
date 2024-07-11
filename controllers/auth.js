@@ -1,6 +1,7 @@
 import User from "../models/User.js";
 import hashPassword from "../utils/hashPassword.js";
 import comparePassword from "../utils/comparePassword.js";
+import generateToken from "../utils/generateToken.js";
 
 
 const signup = async (req, res, next) => {
@@ -46,7 +47,9 @@ const signin = async (req,res,next) => {
             throw new Error("Invalid credentials .. !");
         }
 
-        res.status(200).json({message : "Successfully sign in."})
+        const token = generateToken(user);
+
+        res.status(200).json({code : 200 , status : true ,message : "Successfully sign in.", data : {token}});
 
     }catch (e) {
         next(e);
