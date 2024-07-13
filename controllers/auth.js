@@ -2,21 +2,21 @@ import User from "../models/User.js";
 import hashPassword from "../utils/hashPassword.js";
 import comparePassword from "../utils/comparePassword.js";
 import generateToken from "../utils/generateToken.js";
+import generateCode from "../utils/generateCode.js";
 
 
 const signup = async (req, res, next) => {
     try {
 
         const {name, email, password, role} = req.body;
-
         const isEmailExist = await User.findOne({email});
+
         if(isEmailExist){
             res.code = 400;
             throw new Error("Email already exist.");
         }
 
         const hashedPassword = await hashPassword(password);
-
         const newUser = new User({name, email, password : hashedPassword , role});
         await newUser.save();
 
@@ -25,7 +25,6 @@ const signup = async (req, res, next) => {
     } catch (e) {
         next(e);
     }
-
 };
 
 const signin = async (req,res,next) => {
@@ -33,7 +32,6 @@ const signin = async (req,res,next) => {
     try {
 
         const { email, password } = req.body;
-
         const user = await User.findOne({email});
 
         if(!user){
@@ -54,7 +52,35 @@ const signin = async (req,res,next) => {
     }catch (e) {
         next(e);
     }
-
 }
 
-export {signup,signin};
+const verifyCode = async (req,res,next) => {
+    try{
+
+        const {email} = req.body;
+
+        const user = await User.findOne({email});
+
+        if (!user){
+            res.code = 404;
+            throw new Error("User not found.")
+        }
+
+        if (user.isVerified){
+            res.code = 400;
+            throw new Error("User already verified.")
+        }
+
+        const code = generateCode(6);
+
+        user.verificationCode = code;
+        await user.save();
+
+        res.status(200).json({code : 200,status : true , message: "User verification code send successfully."})
+
+    }catch (e) {
+        next(e);
+    }
+}
+
+export {signup,signin,verifyCode};

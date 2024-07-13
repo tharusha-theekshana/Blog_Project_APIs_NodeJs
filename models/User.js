@@ -9,7 +9,10 @@ const userSchema = mongoose.Schema(
         // 1 -> super admin
         // 2 -> normal admin
         // 3 -> normal user
-        role : { type : Number , default : 3}
+        role : { type : Number , default : 3},
+        verificationCode : String,
+        isVerified: {type : Boolean, default: false}
+
     },{ timeStamps : true}
 )
 
