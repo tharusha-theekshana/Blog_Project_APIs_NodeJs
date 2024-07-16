@@ -38,6 +38,21 @@ const emailValidator = [
         .withMessage("Email is required."),
 
 ];
+
+const verifyUserValidator = [
+    check("email")
+        .isEmail()
+        .withMessage("Invalid Email.")
+        .notEmpty()
+        .withMessage("Email is required."),
+
+    check("code")
+        .notEmpty()
+        .withMessage("Code is required."),
+
+];
+
+
 const validate = (req,res,next) => {
     const errors = validationResult(req);
     const mappedErrors = {};
@@ -54,4 +69,4 @@ const validate = (req,res,next) => {
 }
 
 
-export {signupValidator,signInValidator,emailValidator,validate};
+export {signupValidator,signInValidator,emailValidator,verifyUserValidator,validate};
