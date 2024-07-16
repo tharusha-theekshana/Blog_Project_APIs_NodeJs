@@ -8,7 +8,8 @@ import {
     verifyUser,
     forgotPasswordCode,
     recoverPassword,
-    changePassword
+    changePassword,
+    updateProfile
 } from "../controllers/auth.js";
 import {
     signupValidator,
@@ -17,7 +18,8 @@ import {
     verifyUserValidator,
     recoverPasswordValidator,
     changePasswordValidator,
-    validate,
+    updateProfileValidator,
+    validate
 } from "../validators/validators.js";
 import isAuth from "../middlewares/isAuth.js";
 
@@ -34,5 +36,7 @@ router.post("/forgotPasswordCode", emailValidator, validate, forgotPasswordCode)
 router.post("/recoverPassword", recoverPasswordValidator, validate, recoverPassword);
 
 router.put("/changePassword", changePasswordValidator, validate , isAuth, changePassword);
+
+router.put("/updateProfile", isAuth, updateProfileValidator , validate, updateProfile);
 
 export {router};

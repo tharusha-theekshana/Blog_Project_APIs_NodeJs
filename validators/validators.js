@@ -1,4 +1,5 @@
 import {check, validationResult} from "express-validator";
+import validateEmail from "./validateEmail.js";
 
 const signupValidator = [
     check("name")
@@ -77,6 +78,19 @@ const changePasswordValidator = [
 
 ];
 
+const updateProfileValidator = [
+    check("email")
+        .custom(async (email) => {
+            if (email){
+                const isValidEmail = validateEmail(email);
+                if (!isValidEmail){
+                    throw new Error("Invalid email.");
+                }
+            }
+        }),
+
+];
+
 
 const validate = (req, res, next) => {
     const errors = validationResult(req);
@@ -94,4 +108,4 @@ const validate = (req, res, next) => {
 }
 
 
-export {signupValidator, signInValidator, emailValidator, verifyUserValidator, recoverPasswordValidator,changePasswordValidator, validate};
+export {signupValidator, signInValidator, emailValidator, verifyUserValidator, recoverPasswordValidator,changePasswordValidator,updateProfileValidator, validate};

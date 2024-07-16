@@ -11,13 +11,13 @@ const signup = async (req, res, next) => {
         const {name, email, password, role} = req.body;
         const isEmailExist = await User.findOne({email});
 
-        if(isEmailExist){
+        if (isEmailExist) {
             res.code = 400;
             throw new Error("Email already exist.");
         }
 
         const hashedPassword = await hashPassword(password);
-        const newUser = new User({name, email, password : hashedPassword , role});
+        const newUser = new User({name, email, password: hashedPassword, role});
         await newUser.save();
 
         res.status(200).json({code: 201, status: true, message: "User registered successfully ... !"});
@@ -27,46 +27,46 @@ const signup = async (req, res, next) => {
     }
 };
 
-const signin = async (req,res,next) => {
+const signin = async (req, res, next) => {
 
     try {
 
-        const { email, password } = req.body;
+        const {email, password} = req.body;
         const user = await User.findOne({email});
 
-        if(!user){
+        if (!user) {
             res.code = 401;
             throw new Error("Invalid credentials ... !");
         }
 
-        const match = await comparePassword(password,user.password);
-        if (!match){
+        const match = await comparePassword(password, user.password);
+        if (!match) {
             res.code = 401;
             throw new Error("Invalid credentials .. !");
         }
 
         const token = generateToken(user);
 
-        res.status(200).json({code : 200 , status : true ,message : "Successfully sign in.", data : {token}});
+        res.status(200).json({code: 200, status: true, message: "Successfully sign in.", data: {token}});
 
-    }catch (e) {
+    } catch (e) {
         next(e);
     }
 }
 
-const verifyCode = async (req,res,next) => {
-    try{
+const verifyCode = async (req, res, next) => {
+    try {
 
         const {email} = req.body;
 
         const user = await User.findOne({email});
 
-        if (!user){
+        if (!user) {
             res.code = 404;
             throw new Error("User not found.")
         }
 
-        if (user.isVerified){
+        if (user.isVerified) {
             res.code = 400;
             throw new Error("User already verified.")
         }
@@ -78,53 +78,53 @@ const verifyCode = async (req,res,next) => {
 
         await sendEmail({
             emailTo: user.email,
-            subject : "Email verification code",
+            subject: "Email verification code",
             code,
             content: "Verify user account"
         })
 
-        res.status(200).json({code : 200,status : true , message: "User verification code send successfully."})
+        res.status(200).json({code: 200, status: true, message: "User verification code send successfully."})
 
-    }catch (e) {
+    } catch (e) {
         next(e);
     }
 }
 
-const verifyUser = async (req,res,next) => {
-    try{
+const verifyUser = async (req, res, next) => {
+    try {
 
-        const {email,code} = req.body;
+        const {email, code} = req.body;
 
         const user = await User.findOne({email});
 
-        if (!user){
+        if (!user) {
             res.code = 404;
             throw new Error("User not found.")
         }
 
-        if (user.verificationCode !== code){
+        if (user.verificationCode !== code) {
             res.code = 400;
             throw new Error("Invalid code.")
         }
 
-        user.isVerified =true;
+        user.isVerified = true;
         user.verificationCode = null;
         await user.save();
 
-        res.status(200).json({code : 200,status : true , message: "User verified successfully."})
+        res.status(200).json({code: 200, status: true, message: "User verified successfully."})
 
-    }catch (e) {
+    } catch (e) {
         next(e);
     }
 }
 
-const forgotPasswordCode = async (req,res,next) => {
-    try{
+const forgotPasswordCode = async (req, res, next) => {
+    try {
         const {email} = req.body;
 
         const user = await User.findOne({email});
 
-        if (!user){
+        if (!user) {
             res.code = 404;
             throw new Error("User not found.")
         }
@@ -135,31 +135,30 @@ const forgotPasswordCode = async (req,res,next) => {
         user.save();
 
         await sendEmail({
-            emailTo : user.email,
-            subject : "Forgot Password Code",
+            emailTo: user.email,
+            subject: "Forgot Password Code",
             code,
             content: "Change your password"
         });
 
-        res.status(200).json({code : 200,status : true , message: "Forgot password code sent successfully."})
-    }catch (e){
+        res.status(200).json({code: 200, status: true, message: "Forgot password code sent successfully."})
+    } catch (e) {
         next(e);
     }
 }
 
-
-const recoverPassword = async (req,res,next) => {
-    try{
-        const {email,code,password} = req.body;
+const recoverPassword = async (req, res, next) => {
+    try {
+        const {email, code, password} = req.body;
 
         const user = await User.findOne({email});
 
-        if (!user){
+        if (!user) {
             res.code = 404;
             throw new Error("User not found.")
         }
 
-        if (user.forgotPasswordCode !== code){
+        if (user.forgotPasswordCode !== code) {
             res.code = 400;
             throw new Error("Invalid code.")
         }
@@ -169,8 +168,8 @@ const recoverPassword = async (req,res,next) => {
 
         await user.save();
 
-        res.status(200).json({code : 200,status : true , message: "Password changed successfully."})
-    }catch (e){
+        res.status(200).json({code: 200, status: true, message: "Password changed successfully."})
+    } catch (e) {
         next(e);
     }
 }
@@ -182,19 +181,19 @@ const changePassword = async (req, res, next) => {
 
         const user = await User.findById(_id);
 
-        if (!user){
+        if (!user) {
             res.code = 404;
             throw new Error("User not found.")
         }
 
-        const match = await comparePassword(oldPassword,user.password);
+        const match = await comparePassword(oldPassword, user.password);
 
-        if (!match){
+        if (!match) {
             res.code = 400;
             throw new Error("Old password doesn't match.")
         }
 
-        if (oldPassword === newPassword){
+        if (oldPassword === newPassword) {
             res.code = 400;
             throw new Error("You are providing old password");
         }
@@ -202,10 +201,42 @@ const changePassword = async (req, res, next) => {
         user.password = await hashPassword(newPassword);
         await user.save();
 
-        res.status(200).json({code : 200,status : true , message: "Password changed successfully."})
+        res.status(200).json({code: 200, status: true, message: "Password changed successfully."})
     } catch (e) {
         next(e);
     }
 }
 
-export {signup,signin,verifyCode,verifyUser,forgotPasswordCode,recoverPassword,changePassword};
+const updateProfile = async (req, res, next) => {
+    try {
+        const {_id} = req.user;
+        const {name, email} = req.body;
+
+        const user = await User.findById(_id).select("-password -verificationCode -forgotPasswordCode");
+
+        if (!user) {
+            res.code = 404;
+            throw new Error("User not found.");
+        }
+
+        if (email) {
+            const isUserExist = await User.findOne({email});
+            if (isUserExist && isUserExist.email === email && String(user._id) !== String(isUserExist._id)) {
+                res.code = 400;
+                throw new Error("Email already exist");
+            }
+        }
+
+        user.name = name ? name : user.name;
+        user.email = email ? email : user.email;
+
+        await user.save();
+
+        res.status(200).json({code: 200, status: true, message: "Profile Updated successfully.", data: {user}})
+
+    } catch (e) {
+        next(e);
+    }
+}
+
+export {signup, signin, verifyCode, verifyUser, forgotPasswordCode, recoverPassword, changePassword, updateProfile};
