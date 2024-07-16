@@ -1,9 +1,7 @@
-import http from "https";
+import * as http from "http";
 import app from "./app.js"
 
-import config from './config/keys.js';
-
-const {port} = config;
+const port = process.env.PORT;
 
 // create server
 const server = http.createServer(app);
