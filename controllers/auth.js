@@ -147,4 +147,32 @@ const forgotPasswordCode = async (req,res,next) => {
     }
 }
 
-export {signup,signin,verifyCode,verifyUser,forgotPasswordCode};
+
+const recoverPassword = async (req,res,next) => {
+    try{
+        const {email,code,password} = req.body;
+
+        const user = await User.findOne({email});
+
+        if (!user){
+            res.code = 404;
+            throw new Error("User not found.")
+        }
+
+        if (user.forgotPasswordCode !== code){
+            res.code = 400;
+            throw new Error("Invalid code.")
+        }
+
+        user.password = await hashPassword(password);
+        user.forgotPasswordCode = null;
+
+        await user.save();
+
+        res.status(200).json({code : 200,status : true , message: "Password changed successfully."})
+    }catch (e){
+        next(e);
+    }
+}
+
+export {signup,signin,verifyCode,verifyUser,forgotPasswordCode,recoverPassword};

@@ -1,8 +1,15 @@
 import express from "express";
 
 const router = express.Router();
-import {signin, signup, verifyCode,verifyUser,forgotPasswordCode} from "../controllers/auth.js";
-import {signupValidator, signInValidator, emailValidator,verifyUserValidator, validate} from "../validators/validators.js";
+import {signin, signup, verifyCode, verifyUser, forgotPasswordCode, recoverPassword} from "../controllers/auth.js";
+import {
+    signupValidator,
+    signInValidator,
+    emailValidator,
+    verifyUserValidator,
+    recoverPasswordValidator,
+    validate,
+} from "../validators/validators.js";
 
 router.post("/signup", signupValidator, validate, signup);
 
@@ -12,6 +19,8 @@ router.post("/sendVerificationEmail", emailValidator, validate, verifyCode);
 
 router.post("/verifyUser", verifyUserValidator, validate,verifyUser);
 
-router.post("/forgotPasswordCode", emailValidator , validate, forgotPasswordCode);
+router.post("/forgotPasswordCode", emailValidator, validate, forgotPasswordCode);
+
+router.post("/recoverPassword", recoverPasswordValidator, validate, recoverPassword);
 
 export {router};

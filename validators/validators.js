@@ -52,6 +52,19 @@ const verifyUserValidator = [
 
 ];
 
+const recoverPasswordValidator = [
+    check("email")
+        .isEmail()
+        .withMessage("Invalid Email.")
+        .notEmpty()
+        .withMessage("Email is required."),
+
+    check("code")
+        .notEmpty()
+        .withMessage("Code is required."),
+
+];
+
 
 const validate = (req,res,next) => {
     const errors = validationResult(req);
@@ -69,4 +82,4 @@ const validate = (req,res,next) => {
 }
 
 
-export {signupValidator,signInValidator,emailValidator,verifyUserValidator,validate};
+export {signupValidator,signInValidator,emailValidator,verifyUserValidator,recoverPasswordValidator,validate};
