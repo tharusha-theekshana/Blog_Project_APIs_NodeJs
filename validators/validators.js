@@ -65,14 +65,26 @@ const recoverPasswordValidator = [
 
 ];
 
+const changePasswordValidator = [
+    check("oldPassword")
+        .notEmpty()
+        .withMessage("Old password is required."),
 
-const validate = (req,res,next) => {
+    check("newPassword")
+        .notEmpty()
+        .withMessage("New password is required."),
+
+
+];
+
+
+const validate = (req, res, next) => {
     const errors = validationResult(req);
     const mappedErrors = {};
 
-    if(Object.keys(errors.errors).length === 0){
+    if (Object.keys(errors.errors).length === 0) {
         next();
-    }else{
+    } else {
         errors.errors.map((err) => {
             mappedErrors[err.path] = err.msg;
         })
@@ -82,4 +94,4 @@ const validate = (req,res,next) => {
 }
 
 
-export {signupValidator,signInValidator,emailValidator,verifyUserValidator,recoverPasswordValidator,validate};
+export {signupValidator, signInValidator, emailValidator, verifyUserValidator, recoverPasswordValidator,changePasswordValidator, validate};
