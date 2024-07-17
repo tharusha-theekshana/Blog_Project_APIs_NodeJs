@@ -1,4 +1,5 @@
 import Category from "../models/Category.js";
+import User from "../models/User.js";
 
 const addCategory = async (req,res,next) => {
     try{
@@ -11,7 +12,7 @@ const addCategory = async (req,res,next) => {
             throw new Error("Category already exist.");
         }
 
-        const user = await USer.findById(_id);
+        const user = await User.findById(_id);
 
         if (!user){
             res.code = 404;
