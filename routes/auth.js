@@ -1,6 +1,6 @@
 import express from "express";
 
-const router = express.Router();
+const authRouter = express.Router();
 import {
     signin,
     signup,
@@ -18,25 +18,25 @@ import {
     verifyUserValidator,
     recoverPasswordValidator,
     changePasswordValidator,
-    updateProfileValidator,
-    validate
-} from "../validators/validators.js";
+    updateProfileValidator
+} from "../validators/authValidators.js";
 import isAuth from "../middlewares/isAuth.js";
+import validate from "../validators/validateFunction.js";
 
-router.post("/signup", signupValidator, validate, signup);
+authRouter.post("/signup", signupValidator, validate, signup);
 
-router.post("/signin", signInValidator, validate, signin);
+authRouter.post("/signin", signInValidator, validate, signin);
 
-router.post("/sendVerificationEmail", emailValidator, validate, verifyCode);
+authRouter.post("/sendVerificationEmail", emailValidator, validate, verifyCode);
 
-router.post("/verifyUser", verifyUserValidator, validate, verifyUser);
+authRouter.post("/verifyUser", verifyUserValidator, validate, verifyUser);
 
-router.post("/forgotPasswordCode", emailValidator, validate, forgotPasswordCode);
+authRouter.post("/forgotPasswordCode", emailValidator, validate, forgotPasswordCode);
 
-router.post("/recoverPassword", recoverPasswordValidator, validate, recoverPassword);
+authRouter.post("/recoverPassword", recoverPasswordValidator, validate, recoverPassword);
 
-router.put("/changePassword", changePasswordValidator, validate , isAuth, changePassword);
+authRouter.put("/changePassword", changePasswordValidator, validate , isAuth, changePassword);
 
-router.put("/updateProfile", isAuth, updateProfileValidator , validate, updateProfile);
+authRouter.put("/updateProfile", isAuth, updateProfileValidator , validate, updateProfile);
 
-export {router};
+export {authRouter};

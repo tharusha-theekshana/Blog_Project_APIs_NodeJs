@@ -1,4 +1,4 @@
-import {check, validationResult} from "express-validator";
+import {check} from "express-validator";
 import validateEmail from "./validateEmail.js";
 
 const signupValidator = [
@@ -92,20 +92,6 @@ const updateProfileValidator = [
 ];
 
 
-const validate = (req, res, next) => {
-    const errors = validationResult(req);
-    const mappedErrors = {};
-
-    if (Object.keys(errors.errors).length === 0) {
-        next();
-    } else {
-        errors.errors.map((err) => {
-            mappedErrors[err.path] = err.msg;
-        })
-
-        res.status(400).json(mappedErrors);
-    }
-}
 
 
-export {signupValidator, signInValidator, emailValidator, verifyUserValidator, recoverPasswordValidator,changePasswordValidator,updateProfileValidator, validate};
+export {signupValidator, signInValidator, emailValidator, verifyUserValidator, recoverPasswordValidator,changePasswordValidator,updateProfileValidator};
