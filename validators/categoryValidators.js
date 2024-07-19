@@ -1,9 +1,19 @@
-import {check} from "express-validator";
+import {check,param} from "express-validator";
+import mongoose from "mongoose";
 
 const addCategoryValidator = [
     check("title")
         .notEmpty()
-        .withMessage("Title is required.")
+        .withMessage("Title is required."),
 ]
 
-export {addCategoryValidator};
+const idValidator = [
+    param("id")
+        .custom(async (id) => {
+            if (id && !mongoose.Types.ObjectId.isValid(id)){
+                throw "Invalid category id."
+            }
+        })
+]
+
+export {addCategoryValidator,idValidator};
