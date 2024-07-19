@@ -1,5 +1,5 @@
 import express from "express";
-import {addCategory, deleteCategory, getCategory, updateCategory} from "../controllers/category.js";
+import {addCategory, deleteCategory, getCategories, getCategory, updateCategory} from "../controllers/category.js";
 import {addCategoryValidator, idValidator} from "../validators/categoryValidators.js";
 import validate from "../validators/validateFunction.js";
 import isAuth from "../middlewares/isAuth.js";
@@ -13,6 +13,8 @@ categoryRouter.put("/:id", isAuth, isAdmin, idValidator, addCategoryValidator, v
 
 categoryRouter.delete("/:id", isAuth, isAdmin, idValidator, validate, deleteCategory);
 
-categoryRouter.get("/",isAuth,getCategory);
+categoryRouter.get("/", isAuth, getCategories);
+
+categoryRouter.get("/:id", isAuth, idValidator, validate, getCategory)
 
 export {categoryRouter};

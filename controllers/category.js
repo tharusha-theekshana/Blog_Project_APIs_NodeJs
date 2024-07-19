@@ -79,7 +79,7 @@ const deleteCategory = async (req, res, next) => {
     }
 }
 
-const getCategory = async (req, res, next) => {
+const getCategories = async (req, res, next) => {
     try {
         const {searchQuery, size, page} = req.query;
         let query = {};
@@ -116,4 +116,28 @@ const getCategory = async (req, res, next) => {
     }
 }
 
-export {addCategory, updateCategory, deleteCategory, getCategory}
+const getCategory = async (req, res, next) => {
+    try {
+        const {id} = req.params;
+
+        const category = await Category.findById(id);
+
+        if (!category) {
+            res.code = 400;
+            throw new Error("Category not found.");
+        }
+
+
+        res.status(200).json({
+            code: 200,
+            status: true,
+            message: "Category search successfully.",
+            data: {category}
+        });
+
+    } catch (e) {
+        next(e);
+    }
+}
+
+export {addCategory, updateCategory, deleteCategory, getCategories,getCategory}
