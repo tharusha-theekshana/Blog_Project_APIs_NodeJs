@@ -12,7 +12,6 @@ const generateCode = (codeLength) => {
         code = code + number[length -(i+1) ];
     }
 
-    console.log(code);
     return code;
 }
 
