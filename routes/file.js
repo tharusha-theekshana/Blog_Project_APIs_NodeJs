@@ -5,6 +5,6 @@ import upload from "../middlewares/upload.js";
 
 const fileRouter = express.Router();
 
-fileRouter.post("/upload", isAuth , upload.array("image",3) ,uploadFile);
+fileRouter.post("/upload", isAuth , upload.single("image") ,uploadFile);
 
 export {fileRouter};

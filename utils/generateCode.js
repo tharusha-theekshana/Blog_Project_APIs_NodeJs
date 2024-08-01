@@ -8,7 +8,6 @@ const generateCode = (codeLength) => {
     }
 
     for (let i = 0; i < codeLength; i++) {
-        console.log(code);
         code = code + number[length -(i+1) ];
     }
 
