@@ -1,5 +1,5 @@
 import fileExtValidator from "../validators/fileValidator.js";
-import uploadFileToAWS from "../utils/awsS3.js";
+import {signedUrlS3, uploadFileToAWS} from "../utils/awsS3.js";
 import File from "../models/File.js";
 import path from "path";
 
@@ -46,4 +46,20 @@ const uploadFile = async (req, res, next) => {
     }
 }
 
-export {uploadFile};
+const signedUrl = async (req,res,next) => {
+    try{
+        const {key} = req.query;
+        const url = await signedUrlS3(key);
+
+        res.status(200).json({
+            code: 201,
+            status: true,
+            message: "Get signed url successfully. ",
+            data: {url}
+        })
+    }catch (e) {
+        next(e);
+    }
+}
+
+export {uploadFile,signedUrl};
