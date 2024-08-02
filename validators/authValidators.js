@@ -1,5 +1,6 @@
 import {check} from "express-validator";
 import validateEmail from "./validateEmail.js";
+import mongoose from "mongoose";
 
 const signupValidator = [
     check("name")
@@ -86,6 +87,13 @@ const updateProfileValidator = [
                 if (!isValidEmail){
                     throw new Error("Invalid email.");
                 }
+            }
+        }),
+
+    check("profilePic")
+        .custom(async (profilePic) => {
+            if (profilePic && !mongoose.Types.ObjectId.isValid(profilePic)){
+                    throw new Error("Invalid profile pic.");
             }
         }),
 

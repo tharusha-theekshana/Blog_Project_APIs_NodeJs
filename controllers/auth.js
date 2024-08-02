@@ -1,4 +1,5 @@
 import User from "../models/User.js";
+import File from "../models/File.js";
 import hashPassword from "../utils/hashPassword.js";
 import comparePassword from "../utils/comparePassword.js";
 import generateToken from "../utils/generateToken.js";
@@ -210,7 +211,7 @@ const changePassword = async (req, res, next) => {
 const updateProfile = async (req, res, next) => {
     try {
         const {_id} = req.user;
-        const {name, email} = req.body;
+        const {name, email , profilePic} = req.body;
 
         const user = await User.findById(_id).select("-password -verificationCode -forgotPasswordCode");
 
@@ -227,8 +228,17 @@ const updateProfile = async (req, res, next) => {
             }
         }
 
+        if (profilePic){
+            const file = await File.findById(profilePic);
+            if (!file){
+                res.code = 400;
+                throw new Error("File not found.");
+            }
+        }
+
         user.name = name ? name : user.name;
         user.email = email ? email : user.email;
+        user.profilePic = profilePic;
 
         await user.save();
 
