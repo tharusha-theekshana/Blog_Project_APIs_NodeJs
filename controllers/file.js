@@ -1,5 +1,5 @@
 import fileExtValidator from "../validators/fileValidator.js";
-import {signedUrlS3, uploadFileToAWS} from "../utils/awsS3.js";
+import {deleteFileFromS3, signedUrlS3, uploadFileToAWS} from "../utils/awsS3.js";
 import File from "../models/File.js";
 import path from "path";
 
@@ -62,4 +62,21 @@ const signedUrl = async (req,res,next) => {
     }
 }
 
-export {uploadFile,signedUrl};
+const deleteFile = async (req,res,next) => {
+    try{
+
+        const {key} = req.query;
+
+        await deleteFileFromS3(key);
+        await File.findOneAndDelete({key});
+
+        res.status(200).json({code : 200 , status : true, message: "File deleted successfully."});
+
+
+    }catch (e) {
+        next(e);
+    }
+}
+
+
+export {uploadFile,signedUrl, deleteFile};

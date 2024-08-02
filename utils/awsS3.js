@@ -1,4 +1,9 @@
-import {GetObjectCommand, PutObjectCommand, S3Client} from "@aws-sdk/client-s3";
+import {
+    DeleteObjectCommand,
+    GetObjectCommand,
+    PutObjectCommand,
+    S3Client
+} from "@aws-sdk/client-s3";
 import generateCode from "./generateCode.js";
 import {getSignedUrl} from "@aws-sdk/s3-request-presigner";
 
@@ -54,4 +59,21 @@ const signedUrlS3 = async (Key) => {
     }
 }
 
-export {uploadFileToAWS,signedUrlS3};
+const deleteFileFromS3 = async (Key) => {
+
+    const params = {
+        Bucket: process.env.AWS_BUCKET_NAME,
+        Key
+    }
+
+    const command = new DeleteObjectCommand(params);
+
+    try{
+        await client.send(command);
+        return;
+    }catch (e) {
+        console.log(e);
+    }
+}
+
+export {uploadFileToAWS,signedUrlS3,deleteFileFromS3};
