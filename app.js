@@ -8,6 +8,7 @@ import errorHandler from "./middlewares/index.js";
 import notFound from "./controllers/not_found.js";
 import {categoryRouter} from "./routes/index.js";
 import {fileRouter} from "./routes/file.js";
+import {postRouter} from "./routes/post.js";
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ app.use(morgan("dev")); // use to console log api request routes
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/category", categoryRouter);
 app.use("/api/v1/file", fileRouter);
+app.use("/api/v1/post",postRouter);
 
 //not found route
 app.use("*", notFound);
