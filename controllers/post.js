@@ -33,7 +33,7 @@ const addPost = async (req, res, next) => {
 
         res
             .status(201)
-            .json({code: 201, status: true, message: "Post added successfully" , data : newPost});
+            .json({code: 201, status: true, message: "Post added successfully", data: newPost});
     } catch (error) {
         next(error);
     }
@@ -78,10 +78,34 @@ const updatePost = async (req, res, next) => {
 
         res
             .status(201)
-            .json({code: 201, status: true, message: "Post added successfully" , data : post});
+            .json({code: 201, status: true, message: "Post added successfully", data: post});
 
     } catch (error) {
         next(error);
     }
 };
-export {addPost, updatePost};
+
+const deletePost = async (req, res, next) => {
+    try {
+        const {id} = req.params;
+
+        const post = await Post.findById(id);
+
+        if (!post) {
+            res.code = 404;
+            throw new Error("Post not found");
+        }
+
+        await Post.findByIdAndDelete(id);
+
+        res
+            .status(201)
+            .json({code: 201, status: true, message: "Post deleted successfully"});
+
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+export {addPost, updatePost, deletePost};
