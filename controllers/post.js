@@ -107,5 +107,36 @@ const deletePost = async (req, res, next) => {
     }
 };
 
+const getPosts = async (req, res, next) => {
+    try {
 
-export {addPost, updatePost, deletePost};
+        const {page,size,q} = req.query;
+
+        const pageNumber = parseInt(page) || 1;
+        const sizeNumber = parseInt(page) || 10;
+        let query = {};
+
+        if (q){
+            const search = new RegExp(q,"i");
+
+            query = {
+                $or :[{title:search}]
+            }
+        }
+
+        const total = await Post.countDocuments(query);
+        const pages = Math.ceil(total / sizeNumber);
+
+        const posts = await Post.find(query).sort({updatedBy: -1}).skip((pageNumber -1) * sizeNumber).limit(sizeNumber);
+
+        res
+            .status(201)
+            .json({code: 201, status: true, message: "Get post list successfully" , data : {posts , total , pages }});
+
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+export {addPost, updatePost, deletePost, getPosts};
