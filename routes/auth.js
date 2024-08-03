@@ -9,7 +9,8 @@ import {
     forgotPasswordCode,
     recoverPassword,
     changePassword,
-    updateProfile
+    updateProfile,
+    getCurrentUser
 } from "../controllers/auth.js";
 import {
     signupValidator,
@@ -38,5 +39,7 @@ authRouter.post("/recoverPassword", recoverPasswordValidator, validate, recoverP
 authRouter.put("/changePassword", changePasswordValidator, validate , isAuth, changePassword);
 
 authRouter.put("/updateProfile", isAuth, updateProfileValidator , validate, updateProfile);
+
+authRouter.get("/currentUser",isAuth ,getCurrentUser)
 
 export {authRouter};
