@@ -110,7 +110,7 @@ const deletePost = async (req, res, next) => {
 const getPosts = async (req, res, next) => {
     try {
 
-        const {page, size, q} = req.query;
+        const {page, size, q, category} = req.query;
 
         const pageNumber = parseInt(page) || 1;
         const sizeNumber = parseInt(page) || 10;
@@ -124,13 +124,18 @@ const getPosts = async (req, res, next) => {
             }
         }
 
+        if (category) {
+            query = {...query, category}
+        }
+
         const total = await Post.countDocuments(query);
         const pages = Math.ceil(total / sizeNumber);
 
         const posts = await Post.find(query).sort({updatedBy: -1}).skip((pageNumber - 1) * sizeNumber).limit(sizeNumber)
             .populate("file")
             .populate("category")
-            .populate("updatedBy", "-password -verificationCode -forgotPasswordCode");;
+            .populate("updatedBy", "-password -verificationCode -forgotPasswordCode");
+        ;
 
         res
             .status(201)
